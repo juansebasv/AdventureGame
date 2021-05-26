@@ -1,0 +1,26 @@
+server:
+  port: 9697
+
+spring:
+  application:
+    name: adventure
+  datasource:
+    url: jdbc:h2:mem:testdb
+  jpa:
+    hibernate:
+      ddl-auto: none
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          datasource:
+            init:
+              ScriptUtils: debug
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
