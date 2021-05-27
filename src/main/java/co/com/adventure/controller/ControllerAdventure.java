@@ -2,6 +2,7 @@ package co.com.adventure.controller;
 
 import co.com.adventure.dto.OptionsDto;
 import co.com.adventure.dto.ScoreDto;
+import co.com.adventure.dto.StatusCodeDto;
 import co.com.adventure.service.OptionsService;
 import co.com.adventure.service.ScoreService;
 import io.swagger.annotations.ApiOperation;
@@ -56,12 +57,14 @@ public class ControllerAdventure {
     }
 
     @PostMapping("/adventure/saveScore")
-    public ResponseEntity<String> saveScoreByUser(@RequestBody(required = true) ScoreDto score) {
+    public ResponseEntity<StatusCodeDto> saveScoreByUser(@RequestBody(required = true) ScoreDto score) {
         try {
             if (null != score) {
                 score.setTimestamp(new Date());
                 scoreService.saveScoreByUser(score);
-                return new ResponseEntity<>("saved", HttpStatus.CREATED);
+                StatusCodeDto code = new StatusCodeDto();
+                code.setMessage("saved");
+                return new ResponseEntity<>(code, HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
             }
