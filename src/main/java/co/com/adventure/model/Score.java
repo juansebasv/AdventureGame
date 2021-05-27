@@ -24,13 +24,13 @@ public class Score implements Serializable {
     private String name;
 
     @Column(name = "S_HOUR")
-    private String hour;
+    private int hour;
 
     @Column(name = "S_MINUTE")
-    private String minute;
+    private int minute;
 
     @Column(name = "S_SECOND")
-    private String second;
+    private int second;
 
     @Column(name = "S_TIMESTAMP")
     private Date timestamp;

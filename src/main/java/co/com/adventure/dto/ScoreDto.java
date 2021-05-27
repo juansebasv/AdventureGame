@@ -16,8 +16,8 @@ public class ScoreDto implements Serializable {
 
     private int id;
     private String name;
-    private String hour;
-    private String minute;
-    private String second;
+    private int hour;
+    private int minute;
+    private int second;
     private Date timestamp;
 }

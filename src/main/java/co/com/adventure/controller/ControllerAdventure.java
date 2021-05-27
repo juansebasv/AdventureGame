@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/app")
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 public class ControllerAdventure {
 
     @Autowired
@@ -59,14 +59,15 @@ public class ControllerAdventure {
     @PostMapping("/adventure/saveScore")
     public ResponseEntity<StatusCodeDto> saveScoreByUser(@RequestBody(required = true) ScoreDto score) {
         try {
+            StatusCodeDto code = new StatusCodeDto();
             if (null != score) {
                 score.setTimestamp(new Date());
                 scoreService.saveScoreByUser(score);
-                StatusCodeDto code = new StatusCodeDto();
                 code.setMessage("saved");
                 return new ResponseEntity<>(code, HttpStatus.CREATED);
             } else {
-                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+                code.setMessage("error");
+                return new ResponseEntity<>(code, HttpStatus.NOT_ACCEPTABLE);
             }
         } catch (Exception ex) {
             log.error(ex.getMessage());
