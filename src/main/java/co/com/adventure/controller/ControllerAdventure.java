@@ -21,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/app")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 public class ControllerAdventure {
 
     @Autowired
