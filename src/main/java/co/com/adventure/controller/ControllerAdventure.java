@@ -56,6 +56,13 @@ public class ControllerAdventure {
         }
     }
 
+    @ApiOperation(value = "Guardar el score de cada uno de los usuarios",
+            notes = "Se guardan todos los scores de los usuarios en una tabla general",
+            response = StatusCodeDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, response = OptionsDto.class, message = "Saved"),
+            @ApiResponse(code = 404, response = OptionsDto.class, message = "Not found"),
+            @ApiResponse(code = 406, response = OptionsDto.class, message = "Not Acceptable")})
     @PostMapping("/adventure/saveScore")
     public ResponseEntity<StatusCodeDto> saveScoreByUser(@RequestBody(required = true) ScoreDto score) {
         try {
@@ -75,6 +82,13 @@ public class ControllerAdventure {
         }
     }
 
+    @ApiOperation(value = "Consultar todos los registros de la tabla",
+            notes = "Consulta todos los scores almacenados de los diferentes usuarios",
+            response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, response = OptionsDto.class, message = "OK"),
+            @ApiResponse(code = 404, response = OptionsDto.class, message = "Not found"),
+            @ApiResponse(code = 406, response = OptionsDto.class, message = "Not Acceptable")})
     @GetMapping("/adventure/scores")
     public ResponseEntity<List<ScoreDto>> getAllScores() {
         try {
@@ -82,7 +96,7 @@ public class ControllerAdventure {
             if (null != listScores) {
                 return new ResponseEntity<>(listScores, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
             }
         } catch (Exception ex) {
             log.error(ex.getMessage());
