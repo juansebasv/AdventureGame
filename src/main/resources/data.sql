@@ -1,1 +1,0 @@
-INSERT INTO OPTIONS (DESCRIPTION, OPT_1_TEXT, OPT_2_TEXT, OPT_3_TEXT, OPT_1_VALUE, OPT_2_VALUE, OPT_3_VALUE) VALUES ('Prueba de descripción', 'opcion 1', 'opcion 2', 'opcion 3', 0, 2, 0);
