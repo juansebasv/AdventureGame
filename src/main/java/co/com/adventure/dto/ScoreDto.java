@@ -20,4 +20,5 @@ public class ScoreDto implements Serializable {
     private int minute;
     private int second;
     private Date timestamp;
+    private String cellphone;
 }

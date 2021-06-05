@@ -34,4 +34,7 @@ public class Score implements Serializable {
 
     @Column(name = "S_TIMESTAMP")
     private Date timestamp;
+
+    @Column(name = "CELLPHONE")
+    private String cellphone;
 }

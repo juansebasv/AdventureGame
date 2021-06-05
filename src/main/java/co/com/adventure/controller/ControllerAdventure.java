@@ -65,8 +65,8 @@ public class ControllerAdventure {
             @ApiResponse(code = 406, response = OptionsDto.class, message = "Not Acceptable")})
     @PostMapping("/adventure/saveScore")
     public ResponseEntity<StatusCodeDto> saveScoreByUser(@RequestBody(required = true) ScoreDto score) {
+        StatusCodeDto code = new StatusCodeDto();
         try {
-            StatusCodeDto code = new StatusCodeDto();
             if (null != score) {
                 score.setTimestamp(new Date());
                 scoreService.saveScoreByUser(score);
@@ -78,7 +78,8 @@ public class ControllerAdventure {
             }
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            code.setMessage(ex.getMessage());
+            return new ResponseEntity<>(code, HttpStatus.NOT_FOUND);
         }
     }
 
