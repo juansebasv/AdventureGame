@@ -80,18 +80,18 @@ public class ScoreServiceImp implements ScoreService {
         // parametersList.add(new BasicNameValuePair("domainId", "XX"));
         parametersList.add(new BasicNameValuePair(Constants.attribute_name_2, Constants.attribute_value_2));
         parametersList.add(new BasicNameValuePair(Constants.attribute_name_3, Constants.attribute_value_3));
-        parametersList.add(new BasicNameValuePair(Constants.attribute_name_4, "57" + score.getCellphone()));
+        parametersList.add(new BasicNameValuePair(Constants.attribute_name_4, Constants.indiCOL + score.getCellphone()));
 
-        String pattern = "dd/MM/yyyy";
+        String pattern = Constants.date_format;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String hours = (score.getHour() / 10 == 0) ? "0" + score.getHour() : String.valueOf(score.getHour());
         String mins = (score.getMinute() / 10 == 0) ? "0" + score.getMinute() : String.valueOf(score.getMinute());
         String seconds = (score.getSecond() / 10 == 0) ? "0" + score.getSecond() : String.valueOf(score.getSecond());
 
         String answer = Constants.msg_SMS;
-        answer = answer.replace("[:name]", score.getName())
-                .replace("[:score]", hours + ":" + mins + ":" + seconds)
-                .replace("[:date]", simpleDateFormat.format(new Date()));
+        answer = answer.replace(Constants.rname, score.getName())
+                .replace(Constants.rscore, hours + "h:" + mins + "m:" + seconds + "s")
+                .replace(Constants.rdate, simpleDateFormat.format(new Date()));
 
         parametersList.add(new BasicNameValuePair(Constants.attribute_name_5, answer));
 

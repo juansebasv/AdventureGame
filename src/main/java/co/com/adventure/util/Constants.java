@@ -12,5 +12,12 @@ public class Constants {
     public static final String attribute_name_5 = "msg";
 
     public static final String msg_SMS = "Felicitaciones [:name]!!! Haz completado el reto en medio de la selva. Gracias por haber participado. Tú tiempo fue: [:score] realizado el [:date]";
+
+    public static final String date_format = "dd/MM/yyyy";
+    public static final String rname = "[:name]";
+    public static final String rscore = "[:score]";
+    public static final String rdate = "[:date]";
+    public static final String indiCOL = "57";
+
 }
 
