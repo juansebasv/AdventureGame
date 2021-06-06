@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Service
 public class ScoreServiceImp implements ScoreService {
@@ -83,7 +84,10 @@ public class ScoreServiceImp implements ScoreService {
         parametersList.add(new BasicNameValuePair(Constants.attribute_name_4, Constants.indiCOL + score.getCellphone()));
 
         String pattern = Constants.date_format;
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
         String hours = (score.getHour() / 10 == 0) ? "0" + score.getHour() : String.valueOf(score.getHour());
         String mins = (score.getMinute() / 10 == 0) ? "0" + score.getMinute() : String.valueOf(score.getMinute());
         String seconds = (score.getSecond() / 10 == 0) ? "0" + score.getSecond() : String.valueOf(score.getSecond());
