@@ -29,16 +29,16 @@ public class ScoreServiceImp implements ScoreService {
     @Override
     public void saveScoreByUser(ScoreDto score) throws Exception {
 
-        TimeZone timeZone1 = TimeZone.getTimeZone("America/Bogota");
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTimeZone(timeZone1);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
+        String var = simpleDateFormat.format(new Date());
 
         Score varScore = Score.builder()
                 .name(score.getName().toLowerCase())
                 .hour(score.getHour())
                 .minute(score.getMinute())
                 .second(score.getSecond())
-                .timestamp(calendar.getTime())
+                .timestamp(simpleDateFormat.parse(var))
                 .cellphone(score.getCellphone()).build();
 
         scoreRepository.save(varScore);
