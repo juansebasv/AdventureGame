@@ -84,7 +84,7 @@ public class ScoreServiceImp implements ScoreService {
         parametersList.add(new BasicNameValuePair(Constants.attribute_name_4, Constants.indiCOL + score.getCellphone()));
 
         String pattern = Constants.date_format;
-        TimeZone.setDefault(TimeZone.getTimeZone("America/Bogota"));
+        //TimeZone.setDefault(TimeZone.getTimeZone("America/Bogota"));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
 
@@ -95,7 +95,7 @@ public class ScoreServiceImp implements ScoreService {
         String answer = Constants.msg_SMS;
         answer = answer.replace(Constants.rname, score.getName())
                 .replace(Constants.rscore, hours + "h:" + mins + "m:" + seconds + "s")
-                .replace(Constants.rdate, simpleDateFormat.format(new Date()));
+                .replace(Constants.rdate, simpleDateFormat.format(score.getTimestamp()));
 
         parametersList.add(new BasicNameValuePair(Constants.attribute_name_5, answer));
 
