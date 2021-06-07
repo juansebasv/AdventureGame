@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 @Service
 public class ScoreServiceImp implements ScoreService {
@@ -31,12 +28,17 @@ public class ScoreServiceImp implements ScoreService {
 
     @Override
     public void saveScoreByUser(ScoreDto score) throws Exception {
+
+        TimeZone timeZone1 = TimeZone.getTimeZone("America/Bogota");
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeZone(timeZone1);
+
         Score varScore = Score.builder()
                 .name(score.getName().toLowerCase())
                 .hour(score.getHour())
                 .minute(score.getMinute())
                 .second(score.getSecond())
-                .timestamp(score.getTimestamp())
+                .timestamp(calendar.getTime())
                 .cellphone(score.getCellphone()).build();
 
         scoreRepository.save(varScore);

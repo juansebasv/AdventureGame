@@ -69,8 +69,6 @@ public class ControllerAdventure {
         StatusCodeDto code = new StatusCodeDto();
         try {
             if (null != score) {
-                TimeZone.setDefault(TimeZone.getTimeZone("America/Bogota"));
-                score.setTimestamp(new Date());
                 scoreService.saveScoreByUser(score);
                 code.setMessage("saved");
                 return new ResponseEntity<>(code, HttpStatus.CREATED);
