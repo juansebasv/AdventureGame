@@ -32,13 +32,14 @@ public class ScoreServiceImp implements ScoreService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
         String var = simpleDateFormat.format(new Date());
+        score.setTimestamp(simpleDateFormat.parse(var));
 
         Score varScore = Score.builder()
                 .name(score.getName().toLowerCase())
                 .hour(score.getHour())
                 .minute(score.getMinute())
                 .second(score.getSecond())
-                .timestamp(simpleDateFormat.parse(var))
+                .timestamp(score.getTimestamp())
                 .cellphone(score.getCellphone()).build();
 
         scoreRepository.save(varScore);
