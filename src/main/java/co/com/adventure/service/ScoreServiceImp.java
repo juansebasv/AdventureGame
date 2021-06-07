@@ -84,9 +84,9 @@ public class ScoreServiceImp implements ScoreService {
         parametersList.add(new BasicNameValuePair(Constants.attribute_name_4, Constants.indiCOL + score.getCellphone()));
 
         String pattern = Constants.date_format;
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        TimeZone.setDefault(TimeZone.getTimeZone("America/Bogota"));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
 
         String hours = (score.getHour() / 10 == 0) ? "0" + score.getHour() : String.valueOf(score.getHour());
         String mins = (score.getMinute() / 10 == 0) ? "0" + score.getMinute() : String.valueOf(score.getMinute());
