@@ -10,4 +10,6 @@ public interface ScoreService {
 
     public List<ScoreDto> getAllScores() throws Exception;
 
+    public void sendSMS(ScoreDto score) throws Exception;
+
 }

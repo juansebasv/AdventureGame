@@ -18,7 +18,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 @Service
 public class ScoreServiceImp implements ScoreService {
@@ -29,10 +32,10 @@ public class ScoreServiceImp implements ScoreService {
     @Override
     public void saveScoreByUser(ScoreDto score) throws Exception {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
-        String var = simpleDateFormat.format(new Date());
-        score.setTimestamp(simpleDateFormat.parse(var));
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.date_format);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
+        String var = dateFormat.format(new Date());
+        score.setTimestamp(dateFormat.parse(var));
 
         Score varScore = Score.builder()
                 .name(score.getName().toLowerCase())
@@ -49,6 +52,7 @@ public class ScoreServiceImp implements ScoreService {
 
     @Override
     public List<ScoreDto> getAllScores() throws Exception {
+
         Iterable<Score> scoresBD = scoreRepository.findAll();
         List<ScoreDto> listScores = new ArrayList<>();
         scoresBD.forEach(var -> {
@@ -67,6 +71,7 @@ public class ScoreServiceImp implements ScoreService {
         return listScores;
     }
 
+    @Override
     public void sendSMS(ScoreDto score) throws Exception {
         RequestConfig config = RequestConfig.custom()
                 .setConnectTimeout(5000)
@@ -86,9 +91,8 @@ public class ScoreServiceImp implements ScoreService {
         parametersList.add(new BasicNameValuePair(Constants.attribute_name_3, Constants.attribute_value_3));
         parametersList.add(new BasicNameValuePair(Constants.attribute_name_4, Constants.indiCOL + score.getCellphone()));
 
-        String pattern = Constants.date_format;
-        //TimeZone.setDefault(TimeZone.getTimeZone("America/Bogota"));
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        //----------------- Construcción de le fecha para el SMS -----------------
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.date_format);
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
 
         String hours = (score.getHour() / 10 == 0) ? "0" + score.getHour() : String.valueOf(score.getHour());
@@ -105,7 +109,6 @@ public class ScoreServiceImp implements ScoreService {
         try {
             post.setEntity(new UrlEncodedFormEntity(parametersList, "UTF-8"));
         } catch (UnsupportedEncodingException uex) {
-//            System.out.println("ERROR: codificación de caracteres no soportada");
             throw new Exception("ERROR: codificación de caracteres no soportada");
         }
 
@@ -117,23 +120,16 @@ public class ScoreServiceImp implements ScoreService {
             String resp = EntityUtils.toString(response.getEntity());
 
             if (response.getStatusLine().getStatusCode() != 200) {
-//                System.out.println("ERROR: Código de error HTTP:  " + response.getStatusLine().getStatusCode());
-//                System.out.println("Compruebe que ha configurado correctamente la direccion/url ");
-//                System.out.println("suministrada por Altiria");
                 throw new Exception("ERROR: Código de error HTTP:  " + response.getStatusLine().getStatusCode() +
                         "Compruebe que ha configurado correctamente la direccion/url suministrada por Altiria");
             } else {
                 if (resp.startsWith("ERROR")) {
-//                    System.out.println(resp);
-//                    System.out.println("Codigo de error de Altiria. Compruebe las especificaciones");
                     throw new Exception(resp + " Codigo de error de Altiria. Compruebe las especificaciones");
                 } else {
                     System.out.println(resp);
                 }
             }
         } catch (Exception e) {
-//            System.out.println("Excepción");
-//            e.printStackTrace();
             throw new Exception("ERROR: " + e.getMessage());
         } finally {
             post.releaseConnection();
@@ -141,7 +137,6 @@ public class ScoreServiceImp implements ScoreService {
                 try {
                     response.close();
                 } catch (IOException ioe) {
-//                    System.out.println("ERROR cerrando recursos");
                     throw new Exception("ERROR: Cerrando Recursos: " + ioe.getMessage());
                 }
             }

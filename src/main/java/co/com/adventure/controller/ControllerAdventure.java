@@ -15,9 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -57,8 +55,8 @@ public class ControllerAdventure {
         }
     }
 
-    @ApiOperation(value = "Guardar el score de cada uno de los usuarios",
-            notes = "Se guardan todos los scores de los usuarios en una tabla general",
+    @ApiOperation(value = "Se recibe JSON con la información del score del usuario para ser alamacenado",
+            notes = "Este servicio guarda todos los scores de los usuarios que juegan en el aplicación en la BD",
             response = StatusCodeDto.class)
     @ApiResponses(value = {
             @ApiResponse(code = 201, response = OptionsDto.class, message = "Saved"),
@@ -73,7 +71,7 @@ public class ControllerAdventure {
                 code.setMessage("saved");
                 return new ResponseEntity<>(code, HttpStatus.CREATED);
             } else {
-                code.setMessage("error");
+                code.setMessage("error en el score");
                 return new ResponseEntity<>(code, HttpStatus.NOT_ACCEPTABLE);
             }
         } catch (Exception ex) {
@@ -83,8 +81,8 @@ public class ControllerAdventure {
         }
     }
 
-    @ApiOperation(value = "Consultar todos los registros de la tabla",
-            notes = "Consulta todos los scores almacenados de los diferentes usuarios",
+    @ApiOperation(value = "Devuelve una lista con todos los scores alamacenados en la BD de la app",
+            notes = "Consulta todos los scores almacenados de los diferentes usuarios que han jugado",
             response = List.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, response = OptionsDto.class, message = "OK"),

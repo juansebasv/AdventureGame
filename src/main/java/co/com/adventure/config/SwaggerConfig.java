@@ -25,9 +25,9 @@ public class SwaggerConfig {
     }
 
     private ApiInfo getApiInfo() {
-        return new ApiInfoBuilder().title("Canivales App")
+        return new ApiInfoBuilder().title("Canibales App")
                 .version("1.0.0")
-                .description("API para la administración de Scores del juego Canivales")
+                .description("API para la administración de Scores del juego Canibales")
                 .build();
     }
 }
