@@ -1,44 +1,55 @@
 package co.com.adventure.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
-@Builder
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+/**
+ * Nodo de la historia. Cada partida es un recorrido por esta tabla: las columnas
+ * {@code opt_N_value} contienen el {@code id} del siguiente nodo ({@code 0} = sin salida).
+ *
+ * <p>Los identificadores se asignan de forma explícita en los datos semilla, por eso no
+ * hay estrategia de generación.
+ */
 @Entity
 @Table(name = "OPTIONS")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Options implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String description;
 
     @Column(name = "OPT_1_TEXT")
-    private String opt_1_text;
+    private String option1Text;
 
     @Column(name = "OPT_2_TEXT")
-    private String opt_2_text;
+    private String option2Text;
 
     @Column(name = "OPT_3_TEXT")
-    private String opt_3_text;
+    private String option3Text;
 
     @Column(name = "OPT_1_VALUE")
-    private int opt_1_value;
+    private int option1NextId;
 
     @Column(name = "OPT_2_VALUE")
-    private int opt_2_value;
+    private int option2NextId;
 
     @Column(name = "OPT_3_VALUE")
-    private int opt_3_value;
-
+    private int option3NextId;
 }

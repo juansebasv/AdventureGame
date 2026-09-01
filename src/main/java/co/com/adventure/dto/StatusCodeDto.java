@@ -1,17 +1,17 @@
 package co.com.adventure.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
 import java.io.Serializable;
 
-@Builder
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+/**
+ * Respuesta genérica que transporta un único mensaje de estado
+ * (operaciones de escritura y cuerpo de error del {@code GlobalExceptionHandler}).
+ */
+@Value
 public class StatusCodeDto implements Serializable {
 
-    private String message;
+    private static final long serialVersionUID = 1L;
+
+    String message;
 }
