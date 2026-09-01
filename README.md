@@ -280,19 +280,7 @@ Otros: se eliminaron dependencias sin uso (`junit:4.12`, `commons-httpclient:3.1
 
 ---
 
-## 8. ⚠️ Seguridad
-
-El historial de git contiene **credenciales en texto plano** (usuario/clave de
-Altiria y de la BD de Heroku). Aunque esos servicios ya no respondan:
-
-- Invalidar/rotar esas credenciales.
-- Mantener los secretos siempre fuera del control de versiones (variables de
-  entorno, *secret manager*, `application-*.yml` ignorado).
-- Si procede, reescribir el historial (`git filter-repo`) para eliminarlas.
-
----
-
-## 9. Tests
+## 8. Tests
 
 ```bash
 ./gradlew test          # usa H2 en memoria (perfil 'test'), no requiere Docker
