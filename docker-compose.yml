@@ -1,0 +1,78 @@
+# ============================================================================
+# AdventureGame / canivales  -  entorno local 100% Docker
+#
+#   docker compose up -d --build     construye y levanta BD + mock SMS + API
+#   docker compose logs -f app       sigue el arranque de la API
+#   docker compose down              apaga (conserva los datos)
+#   docker compose down -v           apaga y BORRA la BD (reseed limpio)
+#
+# Servicios:
+#   db            PostgreSQL local (reemplaza al Heroku muerto). Crea el esquema
+#                 y carga datos de ejemplo desde docker/db/init/*.sql en el
+#                 PRIMER arranque.
+#   altiria-mock  Sustituye al proveedor externo de SMS. Responde 200 "OK" a todo,
+#                 para que POST /saveScore complete sin salir a internet.
+#   app           La API Spring Boot. Se construye con el Dockerfile.
+#
+# Toda la parametrización va por variables de entorno; el código y el
+# application.yml no se tocan. Se pueden sobrescribir con un archivo .env.
+# ============================================================================
+
+services:
+
+  db:
+    image: postgres:15-alpine
+    container_name: adventure-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-adventure}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-adventure}
+      POSTGRES_DB: ${POSTGRES_DB:-adventure}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - adventure-db-data:/var/lib/postgresql/data
+      - ./docker/db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-adventure} -d ${POSTGRES_DB:-adventure}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  altiria-mock:
+    image: hashicorp/http-echo:latest
+    container_name: adventure-altiria-mock
+    command: ["-listen=:80", "-text=OK"]
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: adventure-app
+    depends_on:
+      db:
+        condition: service_healthy
+      altiria-mock:
+        condition: service_started
+    environment:
+      # --- Base de datos (apunta al contenedor 'db', no a Heroku) ---
+      DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-adventure}
+      DB_USERNAME: ${POSTGRES_USER:-adventure}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-adventure}
+      JPA_DDL_AUTO: none
+      JPA_SHOW_SQL: "true"
+      # --- Pasarela de SMS (apunta al mock local) ---
+      SMS_ENABLED: "true"
+      SMS_URL: http://altiria-mock/api/http
+      SMS_LOGIN: demo-user
+      SMS_PASSWORD: demo-pass
+      SMS_SENDER_COUNTRY_CODE: "57"
+      SERVER_PORT: "9697"
+    ports:
+      - "${APP_PORT:-9697}:9697"
+
+volumes:
+  adventure-db-data:
+
+networks:
+  default:
+    name: adventure-net

@@ -1,32 +1,68 @@
 server:
-  port: 9697
+  port: ${SERVER_PORT:9697}
 
 spring:
   application:
     name: adventure
+
+  mvc:
+    pathmatch:
+      # Requerido por springdoc 1.5.x cuando también está Actuator en el classpath.
+      matching-strategy: ant_path_matcher
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/adventure}
+    username: ${DB_USERNAME:adventure}
+    password: ${DB_PASSWORD:adventure}
+
   jpa:
     database: POSTGRESQL
-    show-sql: true
+    open-in-view: false
+    show-sql: ${JPA_SHOW_SQL:true}
     hibernate:
-      ddl-auto: update
+      # El esquema se versiona en docker/db/init/*.sql; la app no lo genera.
+      ddl-auto: ${JPA_DDL_AUTO:none}
     properties:
       hibernate:
         jdbc:
           lob:
             non_contextual_creation: true
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://ec2-3-214-3-162.compute-1.amazonaws.com:5432/d8rbp405eu84sd
-    username: zyqesvliihkkah
-    password: c2fcf61b39689075ee656688ac4e5e2c911029df59abf6b407307e5020a2f9bc
+        format_sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# Documentación OpenAPI 3 / Swagger UI (springdoc)
+springdoc:
+  packages-to-scan: co.com.adventure.controller
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    display-request-duration: true
+
+# ---------------------------------------------------------------------------
+# Configuración propia de la aplicación (bindeada por co.com.adventure.config.SmsProperties)
+# ---------------------------------------------------------------------------
+adventure:
+  sms:
+    # Si es false se usa NoOpSmsGateway: el score se guarda pero NO se envía SMS.
+    enabled: ${SMS_ENABLED:false}
+    url: ${SMS_URL:http://www.altiria.net/api/http}
+    login: ${SMS_LOGIN:}
+    password: ${SMS_PASSWORD:}
+    sender-country-code: ${SMS_SENDER_COUNTRY_CODE:57}
+    connect-timeout: ${SMS_CONNECT_TIMEOUT:5s}
+    socket-timeout: ${SMS_SOCKET_TIMEOUT:60s}
+    message-template: >-
+      Felicitaciones {name}!!! Has completado el reto en medio de la selva.
+      Gracias por haber participado. Tu tiempo fue: {score} realizado el {date}
 
 logging:
   level:
-    org:
-      springframework:
-        jdbc:
-          datasource:
-            init:
-              ScriptUtils: debug
+    org.springframework.jdbc.datasource.init.ScriptUtils: debug
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
